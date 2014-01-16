@@ -1,0 +1,36 @@
+<?php
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+require_once 'phpQuery-onefile.php';
+
+function pogodakirov_block_info() {
+  // This hook returns an array, each component of which is an array of block
+  // information. The array keys are the 'delta' values used in other block
+  // hooks.
+
+ 
+  // This sample shows how to provide default settings. In this case we'll
+  // enable the block in the first sidebar and make it visible only on
+  // 'node/*' pages. See the hook_block_info() documentation for these.
+  $blocks['pogodavkirove'] = array(
+    'info' => t('Pogoda v Kirove'),
+    'status' => TRUE,
+    'region' => 'sidebar_first',  // Not usually provided.
+  );
+
+  return $blocks;
+}
+
+function pogodakirov_block_view($delta = '') {
+  // The $delta parameter tells us which block is being requested.
+
+  $weather_document = phpQuery::newDocumentHTML(file_get_contents('http://pogoda.kirov.ru/'), 'utf-8');
+  $weather = $weather_document->find('div div div table');
+  
+  $block['subject'] = t('Погода в Кирове');
+  $block['content'] = "<table>".$weather->html()."</table>";
+  return $block;
+}

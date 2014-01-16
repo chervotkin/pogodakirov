@@ -1,0 +1,4 @@
+name = Pogoda Kirova
+description = Current Weather in Kirov
+core = 7.x
+dependencies[] = block
